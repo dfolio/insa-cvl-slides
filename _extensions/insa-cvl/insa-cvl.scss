@@ -1,0 +1,397 @@
+/*-- scss:defaults --*/
+// fonts
+// stylelint-disable value-keyword-case
+$font-family-sans        : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-family-serif       : 'Latin Modern Roman','Times New Roman',Times, serif;
+$font-family-monospace   : SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !default;
+$font-size-base          : 1.5rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg            : $font-size-base * 1.25 !default;
+$font-size-sm            : $font-size-base * .875 !default;
+$small-font-size         : 80% !default;
+
+$presentation-font-size-root: $font-size-base;
+$presentation-font-smaller: $small-font-size;
+
+// colors
+$white                   : #FFF !default;
+$gray-100                : #F8F9FA !default;
+$gray-200                : #E9ECEF !default;
+$gray-300                : #DEE2E6 !default;
+$gray-400                : #CED4DA !default;
+$gray-500                : #ADB5BD !default;
+$gray-600                : #6C757D !default;
+$gray-700                : #495057 !default;
+$gray-800                : #343A40 !default;
+$gray-900                : #212529 !default;
+$black                   : #000 !default;
+$dark                    : #4f4d50;
+$blue                    : #007BFF !default;
+$indigo                  : #6610F2 !default;
+$purple                  : #6F42C1 !default;
+$pink                    : #E83E8C !default;
+$red                     : #DC3545 !default;
+$orange                  : #FD7E14 !default;
+$yellow                  : #FFC107 !default;
+$green                   : #28A745 !default;
+$teal                    : #20C997 !default;
+$cyan                    : #17A2B8 !default;
+/// INSA color
+$gray-INSA               : #5F5F61;
+$red-INSA                : #E32518;
+$blue-INSA               : #004C6F;
+$magenta-INSA            : #9B0D45;
+$cyan-INSA               : #208896;
+$tan-INSA                : #846B5C;
+$yellow-INSA             : #E29200;
+/// color theme
+$red                     : $red-INSA;
+$primary                 : $red;
+$secondary               : #9d1747;
+$tertiary                : #587f8e;
+$success                 : $green !default;
+$info                    : $cyan-INSA;
+$warning                 : $magenta-INSA;
+$danger                  : $red !default;
+$example                 : $green;
+$exercice                : $tan-INSA;
+$important               : darken($tan-INSA, 20%);
+$light                   : $gray-100 !default;
+$dark                    : #4F4d50;
+$accent                  : $blue-INSA;
+$alert                   : $red-INSA;
+$emphase                 : rgba($cyan-INSA,1);
+$structure               : rgba($blue-INSA,1);
+$strong                  : $structure;
+$muted                   : $gray-INSA;
+
+$colors: (
+  "blue":       $blue,
+  "indigo":     $indigo,
+  "purple":     $purple,
+  "pink":       $pink,
+  "red":        $red,
+  "orange":     $orange,
+  "yellow":     $yellow,
+  "green":      $green,
+  "teal":       $teal,
+  "cyan":       $cyan,
+  "black":      $black,
+  "white":      $white,
+  "gray":       $gray-600,
+  "gray-dark":  $gray-800
+) !default;
+
+// main colors
+$body-bg: $white;
+$body-color: $black;
+$text-muted: $muted;
+// headings
+$presentation-heading-text-align: left;
+$presentation-heading-font:  $font-family-sans;
+$presentation-heading-color:  $primary;
+$presentation-heading-line-height: 1.25;
+$presentation-heading-letter-spacing: normal;
+$presentation-heading-text-transform: none;
+$presentation-heading-text-shadow:  none;
+$presentation-heading-font-weight: 800;
+$presentation-h1-text-shadow: none; //$dark 2px 2px;
+$presentation-h1-box-shadow: none;
+$presentation-h1-font-size:2.5em;
+$presentation-h2-font-size:1.6em;
+$presentation-h3-font-size:1.3em;
+$presentation-h4-font-size:1em;
+
+$presentation-block-margin: 0.5em;
+
+$presentation-slide-text-align: left;
+$presentation-title-slide-text-align:  $presentation-heading-text-align;
+
+// link colors
+$link-color: rgba($primary,0.4);
+$link-color-hover: lighten($link-color, 10%) !default;
+// list
+$list-margin             : 0 0 0 $presentation-block-margin;
+$sublist-margin          : 0 0 0 $presentation-block-margin;
+$sublist-font-size       : 90%;
+$def-margin              : $presentation-block-margin/3 0;
+
+/* -- scss:mixins --*/
+@each $state, $value in $colors {
+  .#{$state} { color: $value}
+}
+@mixin gradient-bg($color) {
+    background: $color linear-gradient(180deg, mix($body-bg, $color, 25%), $color) repeat-x;
+}
+@mixin border-radius($radius: $border-radius, $fallback-border-radius: false) {
+    border-radius: $radius;
+}
+@mixin box-shadow($shadow...) {
+  $result: ();
+  @if (length($shadow) == 1) {
+    // We can pass `@include box-shadow(none);`
+    $result: $shadow;
+  } @else {
+    // Filter to avoid invalid properties for example `box-shadow: none, 1px 1px black;`
+    @for $i from 1 through length($shadow) {
+      @if nth($shadow, $i) != "none" {
+        $result: append($result, nth($shadow, $i), "comma");
+      }
+    }
+  }
+  @if (length($result) > 0) {
+    box-shadow: $result;
+  }
+}
+/*-- scss:rules --*/
+#title-slide {
+  vertical-align: middle;
+  text-align    : $presentation-title-slide-text-align;
+  
+  position: absolute;
+  width: 640px;
+  left: -32px;
+  .author,
+  .date,
+  .formation,
+  .institute,
+  .subtitle,
+  .title {
+    display       : inline-block;
+    width         : 100%;
+  }
+  .author,
+  .subtitle,
+  h1 {
+    font-weight: $presentation-heading-font-weight;
+  }
+
+  .title,
+  h1 {
+    margin        : 2*$presentation-block-margin auto;
+    font-size     : $presentation-h1-font-size;
+    font-weight   : $presentation-heading-font-weight+100;
+    color         : $white;
+  }
+  .subtitle,
+  .date,
+  .quarto-title-authors {
+    position: relative;    
+    color: $black;
+   }
+   
+  .subtitle,
+  .date{
+     //left: -280px;
+  }
+  .subtitle{   
+    //bottom: -200px;
+  }
+  .date{
+    //bottom: -100px;
+  }
+  .quarto-title-authors{
+    //width: 520px;
+    //left: -64px;
+    //bottom: -320px;
+  }
+}
+.reveal {
+  .slide-background {
+    &,
+    .slide-background-content {
+      background-image:  url("../../../../../CVL-bg-r.svg");
+      background-position: right bottom;
+      background-repeat: no-repeat;
+      background-size: 10%;
+    }
+  }
+
+  .slides .slide{
+    margin          : 0 auto;
+
+    h1{
+      vertical-align: middle;
+      text-align    : $presentation-heading-text-align;
+      font-variant  : small-caps;
+      text-transform: capitalize;
+      font-weight   : $presentation-heading-font-weight;
+      text-shadow   : $presentation-h1-text-shadow;
+    }
+
+    h2{
+      font-weight: $presentation-heading-font-weight -100;
+      padding-bottom: 2*$presentation-block-margin;
+    }
+
+    dl,
+    ol,
+    ul {
+      display   : block;
+      text-align: left;
+      //margin    : $list-margin;
+
+      li {
+        margin     : $presentation-block-margin*0.8 0;
+        line-height: 0.9*$presentation-line-height;
+        width      : 100%;
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+    ul {
+      list-style-type: disc;
+
+      ul {
+        list-style-type: square;
+
+        ul {
+          list-style-type: circle;
+          ul {
+          list-style-type: "⋄ ";
+        }
+        }
+      }
+    }
+
+    ol:type(a){
+      list-style-type: alpha;
+    }
+    dd ul,
+    ol ol,
+    ol ul,
+    ul ol,
+    ul ul,
+    ul dl,
+    ol dl, {
+      font-size: $sublist-font-size;
+      margin   : $sublist-margin;
+    }
+
+    blockquote{
+
+    }
+    .center{
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .level2{
+    .english, .en,
+    :lang(en){
+      font-style: oblique;
+      font-size:  90%;
+      opacity  : 0.8;
+    }
+    }
+  }//end slides
+
+  .slide-number {
+    font-size: $small-font-size;
+  }
+  a{
+    color: $blue-INSA;
+  }
+  img{
+    max-width: 100%;
+    max-height: 100%;
+  }
+  img,
+  figcaption{
+    padding: 0;
+    margin: 0;
+  }
+
+  footer,
+  .footer {
+    margin: 0;
+    padding: 0;
+    font-size:$small-font-size;
+    color: rgb($muted,0.6);
+  }
+
+  .table,
+  .figure,
+  figure {
+    justify-content: center;
+    //width      : 100%!important;
+    text-align     : center;
+  }
+
+  .r-stack>*{ width:100%;}
+
+  .structure,
+  b,
+  strong {
+    font-weight: 800;
+    color      : $structure;
+  }
+
+  .emph,
+  .emphase,
+  em {
+      //font-style: italic;
+      color     : $emphase;
+  }
+
+  .example {
+    color      : $example;
+    font-size: 95%;
+  }
+
+  .accent {
+    color: $accent;
+  }
+
+  .alert {
+    color      : $alert;
+    font-weight: 700;
+  }
+  .warning {
+    color      : $warning;
+    font-weight: 600;
+  }
+
+  /* change text*/
+  .small {
+    font-size: $small-font-size;
+    opacity  : 0.8;
+  }
+
+  .smaller {
+    font-size: $small-font-size !important;
+    opacity  : 0.8;
+  }
+  .larger {
+    font-size: larger!important;
+    opacity  : 1;
+  }
+}
+
+.theorem{
+  padding: 0em 0.5em;
+  border-left: solid #acacac 0.3rem;
+  border-right: solid 1px silver;
+  border-top: solid 1px silver;
+  border-bottom: solid 1px silver;
+  display: flex;
+  flex-direction: column;
+}
+.definition{
+  border-left-color: $info ;
+  .theorem-title strong{
+    color: rgba(darken($info,15%),0.6);
+  }
+}
+.example{
+  border-left-color: $example;
+  color: rgba(darken($example,40%),0.8);
+  font-size: smaller;
+  .theorem-title strong{
+    color: rgba(darken($example,30%),0.6);
+  }
+}
+.callout{
+  flex-direction: column;
+}
